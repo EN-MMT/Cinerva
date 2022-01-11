@@ -10,11 +10,9 @@ namespace Cinerva.Data
 {
     public class CinervaDbContext : DbContext
     {
-
-        public CinervaDbContext()
-        {
-
-        }
+        
+        public CinervaDbContext(DbContextOptions<CinervaDbContext> options) : base(options) { }
+        
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Property> Properties { get; set; }

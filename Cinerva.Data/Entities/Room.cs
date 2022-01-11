@@ -14,7 +14,7 @@ namespace Cinerva.Data.Entities
         public RoomCategory RoomCategory { get; set; }
         public int Id { get; set; }
         public int PropertyId { get; set; }
-        //public int Price { get; set; }
+        public int Price { get; set; }
         public IList<RoomFeature> RoomFeatures { get; internal set; }
         public IList<RoomFacility> RoomFacilities { get; internal set; }
         public IList<Reservation> Reservations { get; set; }
