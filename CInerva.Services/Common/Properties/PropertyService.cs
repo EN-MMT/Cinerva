@@ -1,8 +1,6 @@
 ﻿using Cinerva.Data;
 using Cinerva.Data.Entities;
-using Cinerva.Services.Common.Cities;
 using Cinerva.Services.Common.Properties.Dto;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +8,8 @@ using System.Linq;
 namespace Cinerva.Services.Common.Properties
 {
     public class PropertyService : IPropertyService
-    { private readonly CinervaDbContext dbContext;
+    { 
+        public readonly CinervaDbContext dbContext;
 
         public PropertyService(CinervaDbContext dbContext)
         {
@@ -141,7 +140,7 @@ namespace Cinerva.Services.Common.Properties
             dbContext.SaveChanges();
         }
 
-        public string GetCityName(int id)
+        public string GetCityName(int? id)
         {
             return dbContext.Properties
                 .Where(p => p.CityId == id)
@@ -166,5 +165,6 @@ namespace Cinerva.Services.Common.Properties
                 
                 );
         }
+
     }
 }

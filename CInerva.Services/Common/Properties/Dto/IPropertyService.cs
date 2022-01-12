@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Cinerva.Services.Common.Properties.Dto
 {
@@ -11,7 +12,7 @@ namespace Cinerva.Services.Common.Properties.Dto
         void UpdateProperty(PropertyDto propertyDto);
         void DeleteEmployee(int id);
         public List<PropertyDto> GetSkip(int page, int PageSize);
-        public string GetCityName(int id);
+        public string GetCityName(int? id);
         public string GetAdminName(int id);
     }
 }

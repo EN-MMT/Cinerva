@@ -1,12 +1,16 @@
 ﻿using Cinerva.Data;
 using Cinerva.Services.Common.Cities.Dto;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cinerva.Services.Common.Cities
 {
     public class CityService : ICityService
     {
         private readonly CinervaDbContext dbContext;
+
+
 
         public CityService(CinervaDbContext dbContext)
         {
@@ -27,6 +31,18 @@ namespace Cinerva.Services.Common.Cities
                 CountryId = cityEntity.CountryId
             };
 
+        }
+
+        public List<CityDto> GetCities()
+        {
+            return dbContext.Cities.Select(
+                x => new CityDto
+                {
+                    Id = x.Id,
+                    Name = x.Name
+
+                }
+            ).ToList();
         }
     }
 }

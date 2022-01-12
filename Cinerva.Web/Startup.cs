@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cinerva.Services.Common.Cities.Dto;
 using Cinerva.Services.Common.Cities;
+using Cinerva.Services.Common.Users.Dto;
+using Cinerva.Services.Common.Users;
 
 namespace Cinerva.Web
 {
@@ -31,6 +33,7 @@ namespace Cinerva.Web
             services.AddDbContext<CinervaDbContext>();
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<ICityService, CityService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddControllersWithViews();
         }

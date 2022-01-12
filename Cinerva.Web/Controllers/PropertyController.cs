@@ -1,14 +1,11 @@
-﻿
-
-using Cinerva.Data.Entities;
-using Cinerva.Services.Common.Properties;
+﻿using Cinerva.Services.Common.Cities;
+using Cinerva.Services.Common.Cities.Dto;
 using Cinerva.Services.Common.Properties.Dto;
+using Cinerva.Services.Common.Users.Dto;
 using Cinerva.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 
 namespace Cinerva.Web.Controllers
@@ -16,12 +13,14 @@ namespace Cinerva.Web.Controllers
     public class PropertyController : Controller
     {
         private readonly IPropertyService propertyService;
+        private readonly ICityService cityService;
+        private readonly IUserService userService;
 
-        
-
-        public PropertyController(IPropertyService propertyService)
+        public PropertyController(IPropertyService propertyService, ICityService cityService, IUserService userService)
         {
             this.propertyService = propertyService;
+            this.cityService = cityService;
+            this.userService = userService;
         }
         public IActionResult Index()
         {
@@ -51,7 +50,12 @@ namespace Cinerva.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var propertyViewModel = new PropertyViewModel();
+            propertyViewModel.Cities = new SelectList(cityService.GetCities(), "Id", "Name");
+            propertyViewModel.Admins = new SelectList(userService.GetAdmins(), "Id", "FullName");
+
+
+            return View(propertyViewModel);
         }
 
         [HttpPost]
@@ -84,6 +88,8 @@ namespace Cinerva.Web.Controllers
             if (propertyDto == null) return RedirectToAction("Index");
 
             var propertyViewModel = GetPropertyViewModelFromDto(propertyDto);
+            propertyViewModel.Cities = new SelectList(cityService.GetCities(), "Id", "Name", propertyDto.Id);
+            propertyViewModel.Admins = new SelectList(userService.GetAdmins(), "Id", "FullName", propertyDto.Id);
 
             return View(propertyViewModel);
             
@@ -111,18 +117,26 @@ namespace Cinerva.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult Delete(PropertyViewModel propertyViewModel)
+        {
+            var propertyDto = propertyService.GetProperty(propertyViewModel.Id);
+            propertyService.DeleteEmployee(propertyDto.Id);
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
             var propertyDto = propertyService.GetProperty(id);
-            propertyService.DeleteEmployee(id);
-            return RedirectToAction("Index");
+           
+            return View(GetPropertyViewModelFromDto(propertyDto));
         }
 
         [HttpGet]
         public IActionResult Index(int page = 0)
         {
-            const int PageSize = 10; // you can always do something more elegant to set this
+            const int PageSize = 10; 
 
             var count = propertyService.GetCount();
 
@@ -153,7 +167,7 @@ namespace Cinerva.Web.Controllers
                 Phone = propertyDto.Phone,
                 PropertyTypeId = propertyDto.PropertyTypeId,
                 Rating = propertyDto.Rating,
-                CityName = propertyService.GetCityName((int)propertyDto.CityId),
+                CityName = propertyService.GetCityName(propertyDto.CityId),
                 AdminName = propertyService.GetAdminName((int)propertyDto.AdministratorId)
             };
         }
