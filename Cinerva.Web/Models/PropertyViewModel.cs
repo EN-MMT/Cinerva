@@ -6,11 +6,17 @@ namespace Cinerva.Web.Models
 {
     public class PropertyViewModel
     {
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
+        [Range(1, 5, ErrorMessage = "Value between 0 and 5")]
+        [Required]
         public decimal? Rating { get; set; }
+      
+        [Required(AllowEmptyStrings = false)]
         public string Description { get; set; }
+        [Required(AllowEmptyStrings = false)]
         public string Adress { get; set; }
+        [Required(AllowEmptyStrings = false)]
         public string Phone { get; set; }
         public string Zipcode { get; set; }
         [DisplayName("Administrator")]
@@ -19,7 +25,7 @@ namespace Cinerva.Web.Models
         public int NumberOfDayForRefunds { get; set; }
         public int Id { get; set; }
         [DisplayName("Type")]
-        public int? PropertyTypeId { get;  set; }
+        public int? PropertyTypeId { get; set; }
         [DisplayName("City")]
         public int? CityId { get; set; }
         public string CityName { get; set; }

@@ -38,6 +38,8 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2022 - Cinerva.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @ViewBag.userAgent
+            @Context.User.Identity.IsAuthenticated;
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

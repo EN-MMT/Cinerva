@@ -3,14 +3,9 @@ using Cinerva.Services.Common.Properties.Dto;
 using Cinerva.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Cinerva.Services.Common.Cities.Dto;
 using Cinerva.Services.Common.Cities;
 using Cinerva.Services.Common.Users.Dto;
@@ -34,6 +29,8 @@ namespace Cinerva.Web
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<IUserService, UserService>();
+
+            services.AddHttpContextAccessor();
 
             services.AddControllersWithViews();
         }
