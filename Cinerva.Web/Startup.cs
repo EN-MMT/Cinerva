@@ -70,7 +70,7 @@ namespace Cinerva.Web
                 await next();
             });
 
-            
+
             app.UseRouting();
 
             app.UseAuthorization();

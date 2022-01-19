@@ -10,10 +10,10 @@ namespace Cinerva.Web.Models
     {
         [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
-        [Range(1, 5, ErrorMessage = "Value between 0 and 5")]
+        [Range(0, 5, ErrorMessage = "Value between 0 and 5")]
         [Required]
         public decimal? Rating { get; set; }
-      
+
         [Required(AllowEmptyStrings = false)]
         public string Description { get; set; }
         [Required(AllowEmptyStrings = false)]

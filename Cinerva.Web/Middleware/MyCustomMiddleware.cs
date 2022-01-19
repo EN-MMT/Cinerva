@@ -25,9 +25,6 @@ namespace Cinerva.Web.Middleware
             dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
             dInfo.SetAccessControl(dSecurity);
         }
-
-        //private readonly LogSettings logSettings;
-        //static readonly ILogger Log = Serilog.Log.ForContext<MyCustomMiddleware>();
         public MyCustomMiddleware(RequestDelegate next, IConfiguration cfg)
         {
             _next = next;
@@ -35,7 +32,6 @@ namespace Cinerva.Web.Middleware
 
         }
 
-        // IMessageWriter is injected into InvokeAsync
         public async Task InvokeAsync(HttpContext httpContext)
         {
 
@@ -47,19 +43,14 @@ namespace Cinerva.Web.Middleware
                 .File(cfg.GetSection("Logs").GetSection("Path").Value,
                 restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
                 rollingInterval: RollingInterval.Day
-                //cfg.GetSection("Logs").GetSection("Format").Value
                 )
                 .CreateLogger();
 
             GrantAccess(cfg.GetSection("Logs").GetSection("Path").Value);
 
-            //Console.WriteLine("LOL");
             await _next(httpContext);
-            //Console.WriteLine("LOL2");
             Console.WriteLine(cfg.GetSection("Logs").GetSection("Path").Value);
             Console.WriteLine(httpContext.Response.StatusCode);
-            //svc.Write(DateTime.Now.Ticks.ToString());
-            //svc.Write(httpContext.Response.StatusCode.ToString());
             var response = $"HTTP {httpContext.Response.StatusCode.ToString()} {httpContext.Request.Path} responded {httpContext.Response.StatusCode}";
             Log.Write(LogEventLevel.Information,response);
             Console.WriteLine(response);

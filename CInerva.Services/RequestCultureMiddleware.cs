@@ -25,7 +25,6 @@ namespace Cinerva.Services
                 CultureInfo.CurrentUICulture = culture;
             }
 
-            // Call the next delegate/middleware in the pipeline.
             await _next(context);
         }
     }

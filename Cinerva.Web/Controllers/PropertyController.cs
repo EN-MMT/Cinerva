@@ -70,18 +70,18 @@ namespace Cinerva.Web.Controllers
             string containerName = "photos";
             BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
 
-          
-                // Get a reference to a blob
-                BlobClient blob = container.GetBlobClient(saveAsFileName);
 
-                // Open the file and upload its data
-                using (Stream file = fileToPersist.OpenReadStream())
-                {
-                    blob.Upload(file);
-                }
+            // Get a reference to a blob
+            BlobClient blob = container.GetBlobClient(saveAsFileName);
 
-                return blob.Uri.AbsoluteUri;
-         
+            // Open the file and upload its data
+            using (Stream file = fileToPersist.OpenReadStream())
+            {
+                blob.Upload(file);
+            }
+
+            return blob.Uri.AbsoluteUri;
+
         }
 
         [HttpGet]
@@ -98,7 +98,7 @@ namespace Cinerva.Web.Controllers
         [HttpPost]
         public IActionResult Create([FromForm] PropertyViewModel propertyViewModel)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(propertyViewModel);
             }
@@ -124,8 +124,8 @@ namespace Cinerva.Web.Controllers
             foreach (var photo in propertyViewModel.Files)
             {
                 var uri = PersistPhoto(photo, photo.FileName);
-                
-                if(uri !=null)
+
+                if (uri != null)
                     propertyService.AddImageUrlToDatabase(newlyCreatedId, (uri));
             }
             Console.WriteLine("=================");
