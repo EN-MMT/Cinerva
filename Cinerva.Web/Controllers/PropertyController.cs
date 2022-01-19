@@ -1,4 +1,4 @@
-﻿using Cinerva.Services.Common.Cities;
+﻿using Azure.Storage.Blobs;
 using Cinerva.Services.Common.Cities.Dto;
 using Cinerva.Services.Common.Properties.Dto;
 using Cinerva.Services.Common.Users.Dto;
@@ -6,7 +6,9 @@ using Cinerva.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Cinerva.Web.Controllers
@@ -16,6 +18,8 @@ namespace Cinerva.Web.Controllers
         private readonly IPropertyService propertyService;
         private readonly ICityService cityService;
         private readonly IUserService userService;
+
+        private readonly BlobServiceClient blobClient;
 
         private readonly IHttpContextAccessor httpContextAccessor;
 
@@ -33,6 +37,7 @@ namespace Cinerva.Web.Controllers
             this.userService = userService;
             this.httpContextAccessor = httpContextAccessor;
             userAgent = httpContextAccessor.HttpContext.User.ToString();
+            //blobClient = new BlobServiceClient("MPYb3AwL+LV2erjPlO8Rnms8JohwNdwYKvfB4Ad4qU6Flr2yWLsj8rwkNhhiPo+6N7kVmIB0SW2pJvB6LEVsEg==");
         }
         public IActionResult Index()
         {
@@ -57,6 +62,26 @@ namespace Cinerva.Web.Controllers
 
 
             return View(propertiesViewModels);
+        }
+
+        public string PersistPhoto(IFormFile fileToPersist, string saveAsFileName)
+        {
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=cinerva2;AccountKey=MPYb3AwL+LV2erjPlO8Rnms8JohwNdwYKvfB4Ad4qU6Flr2yWLsj8rwkNhhiPo+6N7kVmIB0SW2pJvB6LEVsEg==;EndpointSuffix=core.windows.net";
+            string containerName = "photos";
+            BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
+
+          
+                // Get a reference to a blob
+                BlobClient blob = container.GetBlobClient(saveAsFileName);
+
+                // Open the file and upload its data
+                using (Stream file = fileToPersist.OpenReadStream())
+                {
+                    blob.Upload(file);
+                }
+
+                return blob.Uri.AbsoluteUri;
+         
         }
 
         [HttpGet]
@@ -92,7 +117,11 @@ namespace Cinerva.Web.Controllers
             };
 
             propertyService.CreateProperty(propertyDto);
-
+            Console.WriteLine("=================");
+            Console.WriteLine(propertyViewModel.Files.Count);
+            foreach(var photo in propertyViewModel.Files)
+                Console.WriteLine(PersistPhoto(photo, photo.FileName));
+            Console.WriteLine("=================");
             return RedirectToAction("Index");
         }
 

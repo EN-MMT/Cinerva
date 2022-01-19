@@ -1,11 +1,8 @@
 ﻿using Cinerva.Data;
 using Cinerva.Services.Common.Users.Dto;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cinerva.Services.Common.Users
 {

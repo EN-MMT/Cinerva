@@ -10,6 +10,10 @@ using Cinerva.Services.Common.Cities.Dto;
 using Cinerva.Services.Common.Cities;
 using Cinerva.Services.Common.Users.Dto;
 using Cinerva.Services.Common.Users;
+using Microsoft.AspNetCore.Http;
+using Serilog;
+using Cinerva.Services;
+using Cinerva.Web.Middleware;
 
 namespace Cinerva.Web
 {
@@ -17,6 +21,11 @@ namespace Cinerva.Web
     {
         public Startup(IConfiguration configuration)
         {
+            Log.Logger = new LoggerConfiguration()
+          .Enrich.FromLogContext()
+          .WriteTo.File(@"Logs/log.txt")
+          .CreateLogger();
+
             Configuration = configuration;
         }
 
@@ -33,11 +42,15 @@ namespace Cinerva.Web
             services.AddHttpContextAccessor();
 
             services.AddControllersWithViews();
+
+            services.AddSingleton(Log.Logger);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMyCustomMiddleware();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -51,6 +64,13 @@ namespace Cinerva.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.Use(async (context, next) =>
+            {
+                context.Request.EnableBuffering();
+                await next();
+            });
+
+            
             app.UseRouting();
 
             app.UseAuthorization();

@@ -166,5 +166,10 @@ namespace Cinerva.Services.Common.Properties
                 );
         }
 
+        public void AddImageUrlToDatabase(int id, string url)
+        {
+
+        }
+
     }
 }

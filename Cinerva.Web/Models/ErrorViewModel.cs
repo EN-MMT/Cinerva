@@ -1,5 +1,3 @@
-using System;
-
 namespace Cinerva.Web.Models
 {
     public class ErrorViewModel

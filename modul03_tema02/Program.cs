@@ -2,12 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Data;
-using System.Globalization;
-using System.Linq;
 
 namespace Cinerva.TestConsole
 {

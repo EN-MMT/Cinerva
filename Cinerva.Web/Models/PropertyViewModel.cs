@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -33,5 +35,7 @@ namespace Cinerva.Web.Models
 
         public SelectList Cities { get; set; }
         public SelectList Admins { get; set; }
+
+        public List<IFormFile> Files { get; set; } = new List<IFormFile>();
     }
 }
