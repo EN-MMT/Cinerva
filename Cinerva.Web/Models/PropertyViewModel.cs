@@ -37,5 +37,7 @@ namespace Cinerva.Web.Models
         public SelectList Admins { get; set; }
 
         public List<IFormFile> Files { get; set; } = new List<IFormFile>();
+        [DisplayName("Gallery")]
+        public List<string> imageUrls { get; set; } = new List<string>();
     }
 }

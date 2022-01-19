@@ -88,7 +88,7 @@ namespace Cinerva.Services.Common.Properties
             ).ToList();
         }
        
-        public void CreateProperty(PropertyDto property)
+        public int CreateProperty(PropertyDto property)
         {
             if (property == null) throw new ArgumentNullException(nameof(property));
 
@@ -108,6 +108,8 @@ namespace Cinerva.Services.Common.Properties
             dbContext.Properties.Add(propertyEntity);
 
             dbContext.SaveChanges();
+
+            return dbContext.Properties.Where(p => p.Name == propertyEntity.Name).Select(p => new {Id = p.Id }).FirstOrDefault().Id;
         }
 
         public void UpdateProperty(PropertyDto property)
@@ -168,6 +170,30 @@ namespace Cinerva.Services.Common.Properties
 
         public void AddImageUrlToDatabase(int id, string url)
         {
+            Console.WriteLine("ID "+id+" URL "+url );
+            PropertyImage pi = new PropertyImage()
+            {
+                ImageUrl = url,
+                PropertyId = id
+            };
+            dbContext.PropertyImages.Add(pi);
+
+            dbContext.SaveChanges();
+        }
+
+        public List<string> GetURLs(int id)
+        {
+            var URLs = dbContext.PropertyImages.Where(pi => pi.PropertyId == id).Select(pi => new { URL = pi.ImageUrl }).ToList();
+
+            var convertedURLs = new List<string>();
+            Console.WriteLine("Attempting to get URLS from prop "+id);
+            foreach(var url in URLs)
+            {
+                convertedURLs.Add(url.URL);
+                Console.WriteLine("Added "+url);
+            }
+
+            return convertedURLs;
 
         }
 

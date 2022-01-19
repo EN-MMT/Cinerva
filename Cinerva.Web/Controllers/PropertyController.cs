@@ -56,7 +56,7 @@ namespace Cinerva.Web.Controllers
                     Phone = x.Phone,
                     PropertyTypeId = x.PropertyTypeId,
                     Rating = x.Rating,
-
+                    imageUrls = propertyService.GetURLs(x.Id)
                 }
             ).ToList();
 
@@ -116,11 +116,18 @@ namespace Cinerva.Web.Controllers
                 Rating = propertyViewModel.Rating
             };
 
-            propertyService.CreateProperty(propertyDto);
+            var newlyCreatedId = propertyService.CreateProperty(propertyDto);
+
+
             Console.WriteLine("=================");
             Console.WriteLine(propertyViewModel.Files.Count);
-            foreach(var photo in propertyViewModel.Files)
-                Console.WriteLine(PersistPhoto(photo, photo.FileName));
+            foreach (var photo in propertyViewModel.Files)
+            {
+                var uri = PersistPhoto(photo, photo.FileName);
+                
+                if(uri !=null)
+                    propertyService.AddImageUrlToDatabase(newlyCreatedId, (uri));
+            }
             Console.WriteLine("=================");
             return RedirectToAction("Index");
         }
@@ -200,6 +207,7 @@ namespace Cinerva.Web.Controllers
             this.ViewBag.Page = page;
 
             var propertyViewModel = GetListOfPropertyViewModelFromDto(data);
+
             return View(propertyViewModel);
         }
 
@@ -221,7 +229,8 @@ namespace Cinerva.Web.Controllers
                 PropertyTypeId = propertyDto.PropertyTypeId,
                 Rating = propertyDto.Rating,
                 CityName = propertyService.GetCityName(propertyDto.CityId),
-                AdminName = propertyService.GetAdminName((int)propertyDto.AdministratorId)
+                AdminName = propertyService.GetAdminName((int)propertyDto.AdministratorId),
+                imageUrls = propertyService.GetURLs(propertyDto.Id)
             };
         }
 

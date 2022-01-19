@@ -6,13 +6,14 @@ namespace Cinerva.Services.Common.Properties.Dto
     {
         List<PropertyDto> GetProperties();
         public int GetCount();
-        void CreateProperty(PropertyDto propertyDto);
+        int CreateProperty(PropertyDto propertyDto);
         PropertyDto GetProperty(int id);
         void UpdateProperty(PropertyDto propertyDto);
         void DeleteEmployee(int id);
         public List<PropertyDto> GetSkip(int page, int PageSize);
         public string GetCityName(int? id);
         public string GetAdminName(int id);
+        public List<string> GetURLs(int id);
 
         public void AddImageUrlToDatabase(int id, string url);
     }
